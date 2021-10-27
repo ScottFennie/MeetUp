@@ -1,0 +1,52 @@
+CREATE TABLE IF NOT EXISTS accounts(
+  id VARCHAR(255) NOT NULL primary key COMMENT 'primary key',
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
+  name varchar(255) COMMENT 'User Name',
+  email varchar(255) COMMENT 'User Email',
+  picture varchar(255) COMMENT 'User Picture'
+) default charset utf8 COMMENT '';
+CREATE TABLE IF NOT EXISTS groups(
+  id int NOT NULL AUTO_INCREMENT primary key COMMENT 'primary key',
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
+  name varchar(255) COMMENT 'group Name',
+  picture varchar(255) COMMENT 'group Picture',
+  description varchar(255) COMMENT 'group Picture',
+  ownerId VARCHAR(255) NOT NULL COMMENT 'FK: AccountId',
+  FOREIGN KEY (ownerId) REFERENCES accounts(id) ON DELETE CASCADE
+) default charset utf8 COMMENT '';
+CREATE TABLE IF NOT EXISTS group_members(
+  id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
+  groupId int NOT NULL,
+  memberId VARCHAR(255) NOT NULL,
+  role VARCHAR(255) NOT NULL DEFAULT 'Member',
+  FOREIGN KEY (groupId) REFERENCES groups(id) ON DELETE CASCADE,
+  FOREIGN KEY (memberId) REFERENCES accounts(id) ON DELETE CASCADE
+) default charset utf8 COMMENT '';
+CREATE TABLE IF NOT EXISTS group_events(
+  id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
+  name VARCHAR(255) NOT NULL,
+  location VARCHAR(255) NOT NULL,
+  date DATETIME NOT NULL,
+  startTime VARCHAR(255),
+  description TEXT,
+  groupId int NOT NULL,
+  FOREIGN KEY (groupId) REFERENCES groups(id) ON DELETE CASCADE
+) default charset utf8 COMMENT '';
+CREATE TABLE IF NOT EXISTS attendees(
+  id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
+  groupId int NOT NULL,
+  eventId int NOT NULL,
+  memberId VARCHAR(255) NOT NULL,
+  role VARCHAR(255) NOT NULL DEFAULT 'Member',
+  FOREIGN KEY (groupId) REFERENCES groups(id) ON DELETE CASCADE,
+  FOREIGN KEY (eventId) REFERENCES group_events(id) ON DELETE CASCADE,
+  FOREIGN KEY (memberId) REFERENCES accounts(id) ON DELETE CASCADE
+) default charset utf8 COMMENT '';

@@ -1,21 +1,16 @@
- using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using MeetUp.Repositories;
 using MeetUp.Services;
+using GroupMe.Repositories;
+using GroupMe.Services;
 
 namespace MeetUp
 {
@@ -42,6 +37,15 @@ namespace MeetUp
             
             services.AddScoped<AccountsRepository>();
             services.AddScoped<AccountService>();
+
+             services.AddTransient<GroupsRepository>();
+             services.AddTransient<GroupMembersRepository>();
+             services.AddTransient<GroupEventsRepository>();
+             services.AddTransient<AttendeesRepository>();
+
+             services.AddTransient<GroupsService>();
+
+
         }
 
         private void ConfigureCors(IServiceCollection services)
